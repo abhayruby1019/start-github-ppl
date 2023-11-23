@@ -1,0 +1,77 @@
+name: Flutter CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '2.x.x'  # Specify your Flutter version
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Archive APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Build iOS
+        run: flutter build ios --release --no-codesign
+
+      - name: Archive IPA
+        uses: actions/upload-artifact@v2
+        with:
+          name: ios-release
+          path: build/ios/iphoneos/Runner.app
+
+  deploy:
+    runs-on: macos-latest
+
+    needs: build
+
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: app-release
+          path: build/app
+
+      - name: Deploy to iOS Device
+        run: |
+          # Specify the UDID of your iOS device
+          UDID="<Your_iOS_Device_UDID>"
+          xcrun instruments -w $UDID || true
+          xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -destination "id=$UDID" build
+
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '2.x.x'  # Specify your Flutter version
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Run Tests
+        run: flutter test

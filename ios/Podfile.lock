@@ -1,0 +1,295 @@
+PODS:
+  - device_info_plus (0.0.1):
+    - Flutter
+  - Firebase/CoreOnly (10.12.0):
+    - FirebaseCore (= 10.12.0)
+  - Firebase/Messaging (10.12.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 10.12.0)
+  - firebase_core (2.15.1):
+    - Firebase/CoreOnly (= 10.12.0)
+    - Flutter
+  - firebase_messaging (14.6.7):
+    - Firebase/Messaging (= 10.12.0)
+    - firebase_core
+    - Flutter
+  - FirebaseCore (10.12.0):
+    - FirebaseCoreInternal (~> 10.0)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/Logger (~> 7.8)
+  - FirebaseCoreInternal (10.14.0):
+    - "GoogleUtilities/NSData+zlib (~> 7.8)"
+  - FirebaseInstallations (10.14.0):
+    - FirebaseCore (~> 10.0)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
+    - PromisesObjC (~> 2.1)
+  - FirebaseMessaging (10.12.0):
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleDataTransport (~> 9.2)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/Reachability (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - Flutter (1.0.0)
+  - flutter_inappwebview (0.0.1):
+    - Flutter
+    - flutter_inappwebview/Core (= 0.0.1)
+    - OrderedSet (~> 5.0)
+  - flutter_inappwebview/Core (0.0.1):
+    - Flutter
+    - OrderedSet (~> 5.0)
+  - flutter_local_notifications (0.0.1):
+    - Flutter
+  - geolocator_apple (1.2.0):
+    - Flutter
+  - GoogleDataTransport (9.2.5):
+    - GoogleUtilities/Environment (~> 7.7)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/AppDelegateSwizzler (7.11.5):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
+  - GoogleUtilities/Environment (7.11.5):
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/Logger (7.11.5):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/Network (7.11.5):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (7.11.5)"
+  - GoogleUtilities/Reachability (7.11.5):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (7.11.5):
+    - GoogleUtilities/Logger
+  - HyperSDK (2.1.22):
+    - JuspaySafeBrowser (= 0.1.75)
+    - Salvator (= 1.0.2)
+  - hypersdkflutter (3.0.11):
+    - Flutter
+    - HyperSDK (= 2.1.22)
+  - IOSSecuritySuite (1.9.9)
+  - JuspaySafeBrowser (0.1.75)
+  - local_auth_ios (0.0.1):
+    - Flutter
+  - nanopb (2.30909.0):
+    - nanopb/decode (= 2.30909.0)
+    - nanopb/encode (= 2.30909.0)
+  - nanopb/decode (2.30909.0)
+  - nanopb/encode (2.30909.0)
+  - open_filex (0.0.2):
+    - Flutter
+  - open_settings (0.0.1):
+    - Flutter
+  - OrderedSet (5.0.0)
+  - package_info_plus (0.4.5):
+    - Flutter
+  - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - payu_checkoutpro_flutter (1.0.1):
+    - Flutter
+    - PayUIndia-CheckoutPro (~> 6.0)
+  - PayUIndia-Analytics (3.0.0):
+    - PayUIndia-NetworkReachability (~> 1.0)
+  - PayUIndia-AssetLibrary (3.3.0)
+  - PayUIndia-CardScanner (1.0.0)
+  - PayUIndia-CheckoutPro (6.0.1):
+    - PayUIndia-Analytics (= 3.0)
+    - PayUIndia-AssetLibrary (~> 3.3)
+    - PayUIndia-CardScanner (~> 1.0)
+    - PayUIndia-CheckoutProBase (~> 6.0)
+    - PayUIndia-CommonUI (~> 1.0)
+    - PayUIndia-CrashReporter (~> 2.1)
+    - PayUIndia-Custom-Browser (~> 10.0)
+    - PayUIndia-NativeOtpAssist (~> 2.2)
+    - PayUIndia-NetworkReachability (~> 1.0)
+    - PayUIndia-PayUParams (~> 4.9)
+    - PayUIndia-PG-SDK (~> 9.3)
+    - PayUIndia-UPICore (~> 7.1)
+  - PayUIndia-CheckoutProBase (6.0.1):
+    - PayUIndia-PayUParams (~> 4.9)
+  - PayUIndia-CommonUI (1.1.2):
+    - PayUIndia-Analytics (= 3.0)
+  - PayUIndia-CrashReporter (2.1.0)
+  - PayUIndia-Custom-Browser (10.1.0):
+    - PayUIndia-Analytics (= 3.0)
+    - PayUIndia-CommonUI (~> 1.1)
+  - PayUIndia-Logger (4.0.0)
+  - PayUIndia-NativeOtpAssist (2.2.1):
+    - PayUIndia-Analytics (~> 3.0)
+    - PayUIndia-CommonUI (~> 1.0)
+    - PayUIndia-CrashReporter (~> 2.1)
+    - PayUIndia-NetworkReachability (~> 1.0)
+    - PayUIndia-PayUParams (~> 4.9)
+  - PayUIndia-Networking (4.0.0):
+    - PayUIndia-Logger (= 4.0.0)
+  - PayUIndia-NetworkReachability (1.0.1)
+  - PayUIndia-PayUParams (4.9.0)
+  - PayUIndia-PG-SDK (9.3.0):
+    - PayUIndia-CrashReporter (~> 2.1)
+    - PayUIndia-NetworkReachability (~> 1.0)
+    - PayUIndia-PayUParams (~> 4.9)
+  - PayUIndia-UPICore (7.1.1):
+    - PayUIndia-Networking (~> 4.0)
+    - PayUIndia-PayUParams (~> 4.5)
+  - permission_handler_apple (9.1.1):
+    - Flutter
+  - PromisesObjC (2.3.1)
+  - Salvator (1.0.2)
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - sms_autofill (0.0.1):
+    - Flutter
+  - url_launcher_ios (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
+  - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
+  - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
+  - Flutter (from `Flutter`)
+  - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+  - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
+  - HyperSDK (= 2.1.22)
+  - hypersdkflutter (from `.symlinks/plugins/hypersdkflutter/ios`)
+  - IOSSecuritySuite
+  - local_auth_ios (from `.symlinks/plugins/local_auth_ios/ios`)
+  - open_filex (from `.symlinks/plugins/open_filex/ios`)
+  - open_settings (from `.symlinks/plugins/open_settings/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - payu_checkoutpro_flutter (from `.symlinks/plugins/payu_checkoutpro_flutter/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - sms_autofill (from `.symlinks/plugins/sms_autofill/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+
+SPEC REPOS:
+  trunk:
+    - Firebase
+    - FirebaseCore
+    - FirebaseCoreInternal
+    - FirebaseInstallations
+    - FirebaseMessaging
+    - GoogleDataTransport
+    - GoogleUtilities
+    - HyperSDK
+    - IOSSecuritySuite
+    - JuspaySafeBrowser
+    - nanopb
+    - OrderedSet
+    - PayUIndia-Analytics
+    - PayUIndia-AssetLibrary
+    - PayUIndia-CardScanner
+    - PayUIndia-CheckoutPro
+    - PayUIndia-CheckoutProBase
+    - PayUIndia-CommonUI
+    - PayUIndia-CrashReporter
+    - PayUIndia-Custom-Browser
+    - PayUIndia-Logger
+    - PayUIndia-NativeOtpAssist
+    - PayUIndia-Networking
+    - PayUIndia-NetworkReachability
+    - PayUIndia-PayUParams
+    - PayUIndia-PG-SDK
+    - PayUIndia-UPICore
+    - PromisesObjC
+    - Salvator
+
+EXTERNAL SOURCES:
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
+  firebase_core:
+    :path: ".symlinks/plugins/firebase_core/ios"
+  firebase_messaging:
+    :path: ".symlinks/plugins/firebase_messaging/ios"
+  Flutter:
+    :path: Flutter
+  flutter_inappwebview:
+    :path: ".symlinks/plugins/flutter_inappwebview/ios"
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
+  geolocator_apple:
+    :path: ".symlinks/plugins/geolocator_apple/ios"
+  hypersdkflutter:
+    :path: ".symlinks/plugins/hypersdkflutter/ios"
+  local_auth_ios:
+    :path: ".symlinks/plugins/local_auth_ios/ios"
+  open_filex:
+    :path: ".symlinks/plugins/open_filex/ios"
+  open_settings:
+    :path: ".symlinks/plugins/open_settings/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
+  path_provider_foundation:
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  payu_checkoutpro_flutter:
+    :path: ".symlinks/plugins/payu_checkoutpro_flutter/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
+  sms_autofill:
+    :path: ".symlinks/plugins/sms_autofill/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
+
+SPEC CHECKSUMS:
+  device_info_plus: 7545d84d8d1b896cb16a4ff98c19f07ec4b298ea
+  Firebase: 07150e75d142fb9399f6777fa56a187b17f833a0
+  firebase_core: 4a3246a02f828a01c74a2c26427037786d90f17f
+  firebase_messaging: 0b4f7997f491343b90d9300af54fe55c72135833
+  FirebaseCore: f86a1394906b97ac445ae49c92552a9425831bed
+  FirebaseCoreInternal: d558159ee6cc4b823c2296ecc193de9f6d9a5bb3
+  FirebaseInstallations: f672b1eda64e6381c21d424a2f680a943fd83f3b
+  FirebaseMessaging: bb2c4f6422a753038fe137d90ae7c1af57251316
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
+  flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
+  geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
+  GoogleDataTransport: 54dee9d48d14580407f8f5fbf2f496e92437a2f2
+  GoogleUtilities: 13e2c67ede716b8741c7989e26893d151b2b2084
+  HyperSDK: 09ef92ed7f2ecd199bb5541b78a8b773b144b594
+  hypersdkflutter: 4967cc3e186e750ff17d53f825fd56dc021c357a
+  IOSSecuritySuite: 72c55371aafe586196c325a8348319c36d385ce4
+  JuspaySafeBrowser: 24dd74329c58fd4c21fbb993639a83bdd853c26f
+  local_auth_ios: c6cf091ded637a88f24f86a8875d8b0f526e2605
+  nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
+  open_filex: 6e26e659846ec990262224a12ef1c528bb4edbe4
+  open_settings: 9628e736cb2738fd1dc84159565755c214478158
+  OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
+  package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
+  path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
+  payu_checkoutpro_flutter: 537ba3aa2d63b65b1a611550eb147124653d1074
+  PayUIndia-Analytics: a23768b29283ef781783f38a99c1cf2235020d58
+  PayUIndia-AssetLibrary: d72c575888a38b1f172fcda4e7eac1cdb3ded908
+  PayUIndia-CardScanner: 42a10e1112f1bc954fdb407dd6de472fbf31fa27
+  PayUIndia-CheckoutPro: 91693a14c873a23e775695d5b0bd745fba7ad1e0
+  PayUIndia-CheckoutProBase: d782ba8c5048edb14d965933cb6b14ab5598252e
+  PayUIndia-CommonUI: 44b89551abe8d8ad043cc5120f3680fd8bcf9b6f
+  PayUIndia-CrashReporter: 597caf134e85f9b3bde7d2045cae2def1b86c544
+  PayUIndia-Custom-Browser: 1b6e603c571320692930375a249926602919ee50
+  PayUIndia-Logger: e353d9dd576bac593e428dfbadedf337cbb48b78
+  PayUIndia-NativeOtpAssist: a8acd1c15358eb931f94b3ea2f9c08ea6fec32b7
+  PayUIndia-Networking: bf53f743484256303e24d4e763e6097f04af769c
+  PayUIndia-NetworkReachability: 99e69781b3be99d7b713075ab7b73e6d73a153e4
+  PayUIndia-PayUParams: a78c869ad7684a264c0f2be27c4e5dc7f9e806ce
+  PayUIndia-PG-SDK: c25283160df7cb0fc551f44f5ea9acb7b972ad63
+  PayUIndia-UPICore: 5b1e5e4acbfff3fc5fa253c9219b7e1deb89bd41
+  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
+  PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
+  Salvator: 084905ad83586b10de2c283c87b9241fefac5405
+  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
+  sms_autofill: c461043483362c3f1709ee76eaae6eb570b31686
+  url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
+
+PODFILE CHECKSUM: cf5061e5d6e8804bd15f4f4b3e07b1c14390fff3
+
+COCOAPODS: 1.12.1

@@ -1,90 +1,84 @@
-name: pfin-mobile-super-app
+name: Flutter iOS CI/CD
+
 on:
   push:
     branches:
-      - DEV # Change this to your main branch
+      - main
+
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build_and_deploy:
+    runs-on: macos-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Build
-#       runs-on: ubuntu-latest
-#       steps:
-  #        - uses: actions/checkout@v3
-#           with:
-#             fetch-depth: 0
-        uses: docker://sonarsource/sonar-scanner-cli:latest
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}    
-        with:
-          args: >
-            -Dsonar.projectKey=pfin-mobile-super-app
-            -Dsonar.sources=.
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      # - name: Retrieve JKS File
-      #   run: |
-      #     mkdir -p $HOME/.jks
-      #     cp sign_config_keystore/* $HOME/.jks/
-
-      - name: Set up Flutter
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.10.5'
+          flutter-version: '2.x.x'  # Specify your Flutter version
 
-      # - name: Decode the Keystore file
-      #   env:
-      #     ENCODED_STRING: ${{ secrets.KEYSTORE_BASE64 }}
-      #   run: |
-      #     # import keystore from secrets
-      #     TMP_KEYSTORE_FILE_PATH= /sign_config_keystore
-      #     # mkdir "${TMP_KEYSTORE_FILE_PATH}"
-      #     echo $ENCODED_STRING | base64 -di > /sign_config_keystore/poonawalla-fincorp-prod-signed-key.jks
-
-      - name: Install dependencies
+      - name: Install Dependencies
         run: flutter pub get
 
       - name: Build APK
-        run: flutter build apk --flavor uat
-      
-      # - name: Sign APK
-      #   run: |
-      #     jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore $HOME/.jks/poonawalla-fincorp-prod-signed-key.jks -storepass ${{ secrets.JKS_PASSWORD }} -keypass ${{ secrets.KEY_PASSWORD }} -signedjar app-release-signed.apk build/app/outputs/flutter-apk/app-release.apk ${{ secrets.KEY_ALIAS }}
+        run: flutter build apk --release
 
+      - name: Build iOS
+        run: flutter build ios --release --no-codesign
 
-
-      # - name: Zipalign APK
-      #   run: zipalign -v 4 app-release-signed.apk app-release-aligned.apk
-
-      - name: Sign app APK
-        uses: r0adkll/sign-android-release@v1
-        # ID used to access action output
-        id: sign_app
-        with:
-          releaseDirectory: build/app/outputs/flutter-apk
-          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-          alias: ${{ secrets.ALIAS }}
-          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
-        env:
-          # override default build-tools version (29.0.3) -- optional
-          BUILD_TOOLS_VERSION: "30.0.2"
-
-      - name: Rename APK with Date
+       - name: Build APK and IPA
         run: |
-          current_date=$(date +'%Y%m%d')
-          mv build/app/outputs/flutter-apk/app-uat-release.apk "build/app/outputs/flutter-apk/app-release-${current_date}.apk"
+          flutter build apk --release
+          flutter build ios --release --no-codesign
 
-      # Example use of `signedReleaseFile` output -- not needed
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Signed app bundle
-          path: ${{steps.sign_app.outputs.signedReleaseFile}}
-
-      - name: Archive APK Artifact
+      - name: Archive APK and IPA
         uses: actions/upload-artifact@v2
         with:
-          name: flutter-build
-          path: build/app/outputs/flutter-apk
+          name: artifacts
+          path: |
+            build/app/outputs/flutter-apk/app-release.apk
+            build/ios/iphoneos/Runner.app
+            
+      - name: Deploy to iOS Device
+        if: success()
+        run: |
+          # Specify the UDID of your iOS device
+          UDID="<Your_iOS_Device_UDID>"
+          flutter build ios
+          xcrun instruments -w $UDID || true
+          xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -destination "id=$UDID" build
+
+      - name: Archive Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: build/ios
+
+      - name: Upload to TestFlight or App Store
+        if: success()
+        uses: v7labs/actions/appstore-connect-upload@v1
+        with:
+          apiKey: ${{ secrets.APPSTORE_CONNECT_API_KEY }}
+          issuerId: ${{ secrets.APPSTORE_CONNECT_ISSUER_ID }}
+          keyId: ${{ secrets.APPSTORE_CONNECT_KEY_ID }}
+          appId: ${{ secrets.APPSTORE_CONNECT_APP_ID }}
+          groups: "Internal Testers"  # Modify as needed
+
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '2.x.x'  # Specify your Flutter version
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Run Tests
+        run: flutter test

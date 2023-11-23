@@ -1,0 +1,90 @@
+name: pfin-mobile-super-app
+on:
+  push:
+    branches:
+      - DEV # Change this to your main branch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Build
+#       runs-on: ubuntu-latest
+#       steps:
+  #        - uses: actions/checkout@v3
+#           with:
+#             fetch-depth: 0
+        uses: docker://sonarsource/sonar-scanner-cli:latest
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}    
+        with:
+          args: >
+            -Dsonar.projectKey=pfin-mobile-super-app
+            -Dsonar.sources=.
+
+      # - name: Retrieve JKS File
+      #   run: |
+      #     mkdir -p $HOME/.jks
+      #     cp sign_config_keystore/* $HOME/.jks/
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.10.5'
+
+      # - name: Decode the Keystore file
+      #   env:
+      #     ENCODED_STRING: ${{ secrets.KEYSTORE_BASE64 }}
+      #   run: |
+      #     # import keystore from secrets
+      #     TMP_KEYSTORE_FILE_PATH= /sign_config_keystore
+      #     # mkdir "${TMP_KEYSTORE_FILE_PATH}"
+      #     echo $ENCODED_STRING | base64 -di > /sign_config_keystore/poonawalla-fincorp-prod-signed-key.jks
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --flavor uat
+      
+      # - name: Sign APK
+      #   run: |
+      #     jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore $HOME/.jks/poonawalla-fincorp-prod-signed-key.jks -storepass ${{ secrets.JKS_PASSWORD }} -keypass ${{ secrets.KEY_PASSWORD }} -signedjar app-release-signed.apk build/app/outputs/flutter-apk/app-release.apk ${{ secrets.KEY_ALIAS }}
+
+
+
+      # - name: Zipalign APK
+      #   run: zipalign -v 4 app-release-signed.apk app-release-aligned.apk
+
+      - name: Sign app APK
+        uses: r0adkll/sign-android-release@v1
+        # ID used to access action output
+        id: sign_app
+        with:
+          releaseDirectory: build/app/outputs/flutter-apk
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+        env:
+          # override default build-tools version (29.0.3) -- optional
+          BUILD_TOOLS_VERSION: "30.0.2"
+
+      - name: Rename APK with Date
+        run: |
+          current_date=$(date +'%Y%m%d')
+          mv build/app/outputs/flutter-apk/app-uat-release.apk "build/app/outputs/flutter-apk/app-release-${current_date}.apk"
+
+      # Example use of `signedReleaseFile` output -- not needed
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Signed app bundle
+          path: ${{steps.sign_app.outputs.signedReleaseFile}}
+
+      - name: Archive APK Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: flutter-build
+          path: build/app/outputs/flutter-apk

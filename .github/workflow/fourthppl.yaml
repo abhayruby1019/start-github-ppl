@@ -3,7 +3,7 @@ name: iOS CI/CD
 on:
   push:
     branches:
-      - DEV1
+      - DEV-IOS
 
 jobs:
   build_ios:
@@ -11,6 +11,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        
+      - name: Build
+        uses: docker://sonarsource/sonar-scanner-cli:latest
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}    
+        with:
+          args: >
+            -Dsonar.projectKey=pfin-mobile-super-app
+            -Dsonar.sources=.
 
       - name: Import certificates (iOS)
         env:

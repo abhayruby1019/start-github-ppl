@@ -1,0 +1,38 @@
+name: iOS CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        pod install
+
+    - name: Build and Test
+      run: |
+        xcodebuild -workspace YourProject.xcworkspace -scheme YourScheme -destination 'platform=iOS Simulator,OS=15.0,name=iPhone 13' build test
+
+    - name: Archive
+      run: |
+        xcodebuild -workspace YourProject.xcworkspace -scheme YourScheme -destination 'generic/platform=iOS' archive -archivePath build/YourProject.xcarchive
+
+    - name: Create IPA
+      run: |
+        xcodebuild -exportArchive -archivePath build/YourProject.xcarchive -exportPath build -exportOptionsPlist ExportOptions.plist
+
+    - name: Deploy to TestFlight
+      uses: wzieba/Fastlane-Firebase-Distribution-Github-Action@v1
+      with:
+        appId: ${{ secrets.FIREBASE_APP_ID }}
+        groups: internal_testers
+        ipaPath: build/YourProject.ipa
+        firebaseToken: ${{ secrets.FIREBASE_TOKEN }}

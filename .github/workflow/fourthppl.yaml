@@ -1,0 +1,76 @@
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build_os:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - nmae: Import certificates (ios)
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.IOS_P_12_ENT }}
+          P12_PASSWORD: ${{ secrets.IOS_P_12_ih_PASSWORD }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISION_STAGE }}
+          KEYCHAIN_PASSWORD: {{ secrets.KEYCHAIN_PASSWORD }}
+
+        run: |
+          # create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$$RUNNER_TEMP/build_pp.mobilrprovision
+          kEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          # import certificate and provisioning profile from secrets
+           echo -n "BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERTIFICATE_PATH
+           echo -n "BUILD_PROVISION_PROFILE_BASE64" | base64 --decode --output $PP_PATH
+
+           #create temporary key
+
+           security create-keychain -p $KEYCHAIN_PASSWORD $KEYCHAIN_PATH
+           security set-keychain-setings -lut 21600 $KEYCHAIN_PATH
+           security unlock-keychain -p $KEYCHAIN_PASWORD $KEYCHAIN_PATH
+
+           #import certificate to keychain
+           security import $CERTIFICATE_PATH -P $P12_PASSWORD -A -t cert -f pkcs12 -k $KEYCHSIN_PATH
+           security list-keychain -d user -s $KEYCHAIN_PATH
+
+           #apply provisioning profile
+            mkidir -p ~/Library/MobileDevice/Provisioning\ Profiles
+            cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
+
+# To implement CD, you’ll need four pieces of information:
+#Path to your .ipa file
+#Issuer ID
+#App Store Connect API key ID
+#App Store Connect private key
+
+  deploy:
+    - name: ios app
+      run: xcodebuild -scheme "Actions Productions" clean archive -archivePath "Actions" -configuration "Release Productions"
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            

@@ -3,7 +3,7 @@ name: iOS CI/CD
 on:
   push:
     branches:
-      - main
+      - main1
 
 jobs:
   build:

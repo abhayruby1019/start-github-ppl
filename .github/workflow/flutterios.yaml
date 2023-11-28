@@ -3,7 +3,7 @@ name: Flutter iOS CI/CD
 on:
   push:
     branches:
-      - main2
+      - DEV-IOS
 
 jobs:
   build_and_deploy:
@@ -13,21 +13,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '2.x.x'  # Specify your Flutter version
-
-      - name: Install Dependencies
-        run: flutter pub get
-
       - name: Build APK
         run: flutter build apk --release
 
       - name: Build iOS
         run: flutter build ios --release --no-codesign
 
-       - name: Build APK and IPA
+      - name: Build APK and IPA
         run: |
           flutter build apk --release
           flutter build ios --release --no-codesign
@@ -64,21 +56,3 @@ jobs:
           keyId: ${{ secrets.APPSTORE_CONNECT_KEY_ID }}
           appId: ${{ secrets.APPSTORE_CONNECT_APP_ID }}
           groups: "Internal Testers"  # Modify as needed
-
-  tests:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '2.x.x'  # Specify your Flutter version
-
-      - name: Install Dependencies
-        run: flutter pub get
-
-      - name: Run Tests
-        run: flutter test

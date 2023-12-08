@@ -1,87 +1,77 @@
-name: iOS CI/CD
+name: CI/CD for IOS
 
 on:
   push:
     branches:
       - DEV-IOS
 
+permissions:
+  id-token: write
+  contents: read    
+
+
 jobs:
-  build_ios:
+  Authentication:
     runs-on: macos-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Install the Apple certificate and provisioning profile
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Import certificates (iOS)
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+
         run: |
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
-
+          
           # import certificate and provisioning profile from secrets
-          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
-          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
-
-          # create temporary keychain
-          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          echo -n $BUILD_CERTIFICATE_BASE64 | base64 --decode --output $CERTIFICATE_PATH
+          echo -n $BUILD_PROVISION_PROFILE_BASE64 | base64 --decode --output $PP_PATH
+          
+          # create a temporary keychain
+          security create-keychain -p $KEYCHAIN_PASSWORD $KEYCHAIN_PATH
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-
+          security unlock-keychain -p $KEYCHAIN_PASSWORD $KEYCHAIN_PATH
+          
           # import certificate to keychain
-          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security list-keychain -d user -s $KEYCHAIN_PATH
-
+          security import $CERTIFICATE_PATH -P $P12_PASSWORD -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security list-keychains -d user -s $KEYCHAIN_PATH
+          
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-      - name: Build app
+  
+  build:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+        
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: "12.x"
+      # 10   
+    - uses: subosito/flutter-action@v2
+      with:
+          # 11
+        flutter-version: "3.10.6"
+        channel: 'stable'
 
-  deploy:
-    - name: iOS App
-      runs-on: macos-latest
-      steps:
-        - name: Build and Archive iOS App
-          run: xcodebuild -scheme "Actions Productions" clean archive -archivePath "Actions" -configuration "Release Production"
-
-        - name: Export IPA
-          env:
-            EXPORT_PLIST: ${{ secrets.IOS_EXPORT_PRODUCTIONS }}
-          run: |
-            # create export options
-            EXPORT_PLIST_PATH=$RUNNER_TEMP/ExportOptions.plist
-            echo -n $EXPORT_PLIST | base64 --decode --output $EXPORT_PLIST_PATH
-            xcodebuild -exportArchive -archivePath $GITHUB_WORKSPACE/Actions.xcarchive -exportOptionsPlist $EXPORT_PLIST_PATH -exportPath $RUNNER_TEMP/export
-
-        - name: Upload IPA
-          uses: actions/upload-artifact@v2
-          with:
-            name: ios-artifact
-            path: $RUNNER_TEMP/export
-
-        - name: Rename the file, remove whitespace
-          run: |
-            echo Export directory contents:
-            ls $RUNNER_TEMP/export/
-            mv "$RUNNER_TEMP/export/Actions Productions.ipa" "$RUNNER_TEMP/export/ActionsProductions.ipa"
-            ls $RUNNER_TEMP/export/
-
-        - name: Decode auth, API key file, and save it
-          env:
-            API_KEY_BASE64: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
-          run: |
-            mkdir -p ~/private_keys
-            echo -n $API_KEY_BASE64 | base64 --decode > ~/private_keys/AuthKey_${{ secrets.APPSTORE_API_KEY_ID }}.p8
-            echo "After saving"
-            ls ~/private_keys
-
-        - name: Upload file to TestFlight using CLI
-          run: |
-            echo "Starting upload."
-            ls ~/private_keys
-            xcrun altool --validate-app -f $RUNNER_TEMP/export/ActionsProductions.ipa -t ios --apiKey ${{ secrets.APPSTORE_API_KEY_ID }}
-            xcrun altool --upload-app -f $RUNNER_TEMP/export/ActionsProductions.ipa -t ios --apiKey ${{ secrets.APPSTORE_API_KEY_ID }}
+    - name: Build iOS
+      run: |
+        flutter build ipa --release --no-codesign
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: iOS Build
+        path: ios/
+        repository: pfin-mobile-super-app
+        artifact: ios/my-app.ipa

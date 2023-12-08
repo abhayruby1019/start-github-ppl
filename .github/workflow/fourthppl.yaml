@@ -73,5 +73,5 @@ jobs:
       with:
         name: iOS Build
         path: ios/
-        repository: pfin-mobile-super-app
-        artifact: ios/my-app.ipa
+#        repository: pfin-mobile-super-app
+        artifact: my-app.ipa

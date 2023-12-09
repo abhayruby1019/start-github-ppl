@@ -1,3 +1,4 @@
+
 name: CI/CD for IOS
 
 on:
@@ -83,3 +84,35 @@ jobs:
           # Assuming your IPA file is in the build/ios/ directory
           ipa_path=build/ios/Runner.ipa
           /usr/bin/xcrun altool --upload-app -f $ipa_path -t ios -u ${{ secrets.APPLE_ID }} -p ${{ secrets.APPLE_ID_PASSWORD }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          Run # Assuming your IPA file is in the build/ios/ directory
+  # Assuming your IPA file is in the build/ios/ directory
+  ipa_path=build/ios/Runner.ipa
+  /usr/bin/xcrun altool --upload-app -f $ipa_path -t ios -u  -p 
+  shell: /bin/bash -e {0}
+-p's password: 
+2023-12-09 06:10:37.901 *** Error: Error uploading 'build/ios/Runner.ipa'.
+2023-12-09 06:10:37.901 *** Error: Unable to upload archive. The file 'build/ios/Runner.ipa' cannot be found. (-43)
+ {
+    NSLocalizedDescription = "Unable to upload archive.";
+    NSLocalizedFailureReason = "The file 'build/ios/Runner.ipa' cannot be found.";
+}
+2023-12-09 06:10:37.902 *** Error: Unable to read password from stdin. Unable to validate your application. (-1004)
+ {
+    NSLocalizedDescription = "Unable to read password from stdin.";
+    NSLocalizedFailureReason = "Unable to validate your application.";
+}

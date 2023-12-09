@@ -70,8 +70,44 @@ jobs:
         flutter build ipa --release --no-codesign
         /usr/bin/xcodebuild -version
 
+name: Build and Deploy to TestFlight
 
+on:
+  push:
+    branches:
+      - main
 
+jobs:
+  build:
 
+    runs-on: macos-latest
 
-xcodebuild clean build -scheme "Runner" -archivePath $RUNNER_TEMP/ios/.xcarchive -sdk iphoneos -configuration Debug -destination generic/platform=iOS
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.10.6'
+
+    - name: Install Dependencies
+      run: flutter pub get
+
+    - name: Build iOS App
+      run: flutter build ios --release
+
+  deploy:
+    needs: build
+    runs-on: macos-latest
+
+    steps:
+    - name: Upload to TestFlight
+      uses: wzieba/Fastlane-Action@v2
+      with:
+        lane: testflight
+        version: 'your_version_number' # Set your version number
+        build_number: ${{ github.run_number }}
+        ios_scheme: 'YourAppScheme'
+        api_key: ${{ secrets.FASTLANE_API_KEY }}
+        api_token: ${{ secrets.FASTLANE_API_TOKEN }}

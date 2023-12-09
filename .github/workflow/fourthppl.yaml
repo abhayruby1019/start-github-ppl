@@ -85,6 +85,19 @@ jobs:
           ipa_path=build/ios/Runner.ipa
           /usr/bin/xcrun altool --upload-app -f $ipa_path -t ios -u ${{ secrets.APPLE_ID }} -p ${{ secrets.APPLE_ID_PASSWORD }}
 
+          deploy:
+  runs-on: macos-latest
+  needs: build
+  steps:
+    - name: Upload to TestFlight
+      run: |
+        # Assuming your IPA file is in the build/ios/ directory
+        ipa_path=$GITHUB_WORKSPACE/build/ios/Runner.ipa
+        cd $GITHUB_WORKSPACE  # Change to the root directory of your repository
+
+        /usr/bin/xcrun altool --upload-app -f $ipa_path -t ios -u ${{ secrets.APPLE_ID }} -p ${{ secrets.APPLE_ID_PASSWORD }}
+
+
 
 
 

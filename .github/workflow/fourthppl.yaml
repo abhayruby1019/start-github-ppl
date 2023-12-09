@@ -98,6 +98,7 @@ jobs:
         /usr/bin/xcrun altool --upload-app -f $ipa_path -t ios -u ${{ secrets.APPLE_ID }} -p ${{ secrets.APPLE_ID_PASSWORD }}
 
 
+sudo xcode-select -s /Applications/Xcode_13.0.app/Contents/Developer
 
 
 

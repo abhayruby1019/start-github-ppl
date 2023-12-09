@@ -65,13 +65,6 @@ jobs:
         channel: 'stable'
 
     - name: Build iOS
-      run: |
+      run: | 
         flutter build ipa --release --no-codesign
-        
-    - name: Upload artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: iOS Build
-        path: ios/
-#        repository: pfin-mobile-super-app
-        artifact: my-app.ipa
+        /usr/bin/xcodebuild -version

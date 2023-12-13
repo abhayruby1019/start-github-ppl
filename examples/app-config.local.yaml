@@ -1,8 +1,0 @@
-
-
-# Backstage override configuration for your local development environment
-
-integrations:
-  github:
-    - host: github.com
-      token: ${GITHUB_TOKEN}
